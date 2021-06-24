@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Watch Shop</title>
+  </head>
+
+  <!-- The following table merely provides an Interface for you (the client) to compose the Request
+       it has nothing to do with the the actual task given -->
+  <body id="content">
+    <table width="400px" style="border: 1px grey solid; padding: 5px">
+      <tr>
+        <td>Watch Name</td>
+        <td>Price</td>
+        <td>Discount</td>
+      </tr>
+      <tr>
+        <td>Rolex</td>
+        <td>100</td>
+        <td>3 for 200</td>
+        <td><button value="001" onclick="add(this.value)">add</button></td>
+        <td>
+          <button value="001" onclick="remove(this.value)">remove</button>
+        </td>
+      </tr>
+      <tr>
+        <td>Michael Kors</td>
+        <td>80</td>
+        <td>2 for 120</td>
+        <td><button value="002" onclick="add(this.value)">add</button></td>
+        <td>
+          <button value="002" onclick="remove(this.value)">remove</button>
+        </td>
+      </tr>
+      <tr>
+        <td>Swatch</td>
+        <td colspan="2">50</td>
+        <td><button value="003" onclick="add(this.value)">add</button></td>
+        <td>
+          <button value="003" onclick="remove(this.value)">remove</button>
+        </td>
+      </tr>
+      <tr>
+        <td>Casio</td>
+        <td colspan="2">30</td>
+        <td><button value="004" onclick="add(this.value)">add</button></td>
+        <td>
+          <button value="004" onclick="remove(this.value)">remove</button>
+        </td>
+      </tr>
+    </table>
+    <p id="display" style="font-weight: bold">Post Request Body:</p>
+    <script>
+      // data to be sent, it is held here to be sent or displayed later
+      const data = [];
+
+      async function postData(url) {
+        // creating a POST Request with appropriate information
+        const request = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "follow",
+          // using JSON.stringify instead of putting it directly
+          // so new values can easily be slotted as new lines
+          body: JSON.stringify({
+            data: data,
+          }),
+        })
+          .then((response) => response.text())
+          .then((response) => {
+            document.getElementById("content").innerHTML =
+              "<pre>" +
+              JSON.stringify(JSON.parse(response), null, 2) +
+              "</pre>";
+          })
+      }
+
+      // adding and removing items to the array to be sent
+      function add(id) {
+        data.push(id);
+        organize();
+      }
+      function remove(id) {
+        // using lastIndexOf instead of indexOf so things are easier to follow when read from the right
+        const index = data.lastIndexOf(id);
+        if (index > -1) {
+          data.splice(index, 1);
+        }
+        organize();
+      }
+      function organize() {
+        // updating interface
+        document.getElementById("display").innerHTML =
+          "Post Request Body: " + data;
+      }
+    </script>
+    <button onclick="postData('http://localhost:8080/checkout')">
+      Send Post Request
+    </button>
+  </body>
+</html>
