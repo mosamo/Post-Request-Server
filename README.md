@@ -5,7 +5,7 @@ Small client/server demo to showcase the creation, sending and reading of post r
 ### How to use
 - clone using ``git clone https://github.com/mosamo/Post-Request-Server.git``
 - Navigate to project directory
-- install express using ``npm install express``
+- install express using ``npm install express`` (install node.js first if it is not on your machine)
 - start the server using ``node .`` or ``node index.js``
 - connect to ``http://localhost:8080/``
 - create a post request using the interface and receive JSON Object result
